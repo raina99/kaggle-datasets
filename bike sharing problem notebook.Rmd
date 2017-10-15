@@ -8,6 +8,7 @@ This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
 
 ```{r}
+ #Loading libraries
 library(dplyr)
 library(ggplot2)
 library(lubridate)
@@ -15,11 +16,13 @@ library(fasttime)
 ```
 
 ```{r}
+# Reading train and test files
 train  <- read.csv("train (1).csv", header = TRUE, na.strings = FALSE) 
 test <- read.csv("test (1).csv",header = TRUE, na.strings = FALSE)
 ```
 
 ```{r}
+# Checking structure of data
 str(train)
 ```
 
@@ -84,6 +87,7 @@ hist(train$casual)# good tells extent # right skewed
 ```
 
 ```{r}
+# Checking missing values
 colSums(is.na(train))
 ```
 
@@ -123,13 +127,4 @@ write.csv(solutiondrf2, "rf2", row.names = FALSE)
 # rmse = 3.09  very poor
 ```
 
-```{r}
 
-```
-
-
-
-
-
-
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
