@@ -1,0 +1,135 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(fasttime)
+```
+
+```{r}
+train  <- read.csv("train (1).csv", header = TRUE, na.strings = FALSE) 
+test <- read.csv("test (1).csv",header = TRUE, na.strings = FALSE)
+```
+
+```{r}
+str(train)
+```
+
+```{r}
+## feature engineering
+
+train %>% 
+  mutate(datetime = fastPOSIXct(datetime, "GMT")) %>% 
+  mutate(hour = hour(datetime),
+         month = month(datetime),
+         year = year(datetime),
+          wday = wday(datetime)) -> train
+
+
+
+test %>% 
+  mutate(datetime = fastPOSIXct(datetime, "GMT")) %>% 
+  mutate(hour = hour(datetime),
+         month = month(datetime),
+         year = year(datetime),
+         wday = wday(datetime)) -> test
+
+```
+
+```{r}
+library(gmodels)
+as.matrix((table(train$weather)))
+# tells clearly majority of people prefer weather 1
+as.matrix((table(train$weather, train$holiday)))
+# majority of persons go on working days in all 4 types of weather
+
+```
+
+```{r}
+as.matrix((table(train$weather, train$workingday)))
+
+```
+
+```{r}
+ggplot(data = train)+
+  geom_bar(mapping = aes(x = weather, fill = season))
+```
+
+```{r}
+ggplot(data = train)+
+  geom_jitter(mapping = aes(x = weather, y = holiday, color = workingday))
+
+```
+
+```{r}
+ggplot(data = train)+
+  geom_jitter(mapping = aes(x = weather,  y = year,fill = season))
+##weather dictates the trends
+```
+
+```{r}
+hist(train$registered) # good  it tells the extent # right skewed graph
+
+```
+```{r}
+hist(train$casual)# good tells extent # right skewed
+```
+
+```{r}
+colSums(is.na(train))
+```
+
+```{r}
+# removing datetime,
+# removing registered, casual from the columns as they tell the same thing as we have count already
+train = train[,-c(1,10,11)]
+test$count = NULL # Creating target variable in test set
+```
+
+```{r}
+library(rpart)
+library(Metrics)
+
+## Decision tree
+fit = rpart(count~ ., data = train, method = "anova")
+predictions = predict(fit, test)
+```
+
+```{r}
+solutiondt1 = data.frame(datetime = test$datetime, count = predictions)
+write.csv(solutiondt1, "dt2", row.names = FALSE)
+ # accuracy  rmse  = 0.90 
+```
+
+```{r}
+ #randomForest()
+library(randomForest)
+fit_rf = randomForest(count~ ., train, ntree = 500, importance = TRUE)
+pred = predict(fit_rf, test)
+importance(fit_rf, type = 1)
+```
+```{r}
+## least important are season and holiday
+solutiondrf2= data.frame(datetime = test$datetime, count = pred)
+write.csv(solutiondrf2, "rf2", row.names = FALSE)
+# rmse = 3.09  very poor
+```
+
+```{r}
+
+```
+
+
+
+
+
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
