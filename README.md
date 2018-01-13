@@ -1,4 +1,4 @@
-# kaggle-datsets
+# kaggle-datasets
 This repository includes kaggle datasets from competitions from kaggle and their solutions namely 
  Here are the few
  
