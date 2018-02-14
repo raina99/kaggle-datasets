@@ -4,7 +4,7 @@ This repository includes kaggle datasets from competitions from kaggle and their
  
  
  
- (1)Mercari Price suggestion challenge - In progress 
+ (1)Mercari Price suggestion challenge - In progress- Presently at Top 63% 
  
  
  
