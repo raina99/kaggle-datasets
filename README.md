@@ -38,6 +38,7 @@ Score - Top 5 %
 
 
 (6)  New York City Airbnb Open Data - Since 2008, guests and hosts have used Airbnb to expand on traveling possibilities and present more unique, personalized way of experiencing the world. This dataset describes the listing activity and metrics in NYC, NY for 2019.Need to check the data to see what can we learn about it .
+Still working on it
 
 
 
